@@ -1,11 +1,10 @@
 package net.test.cloudmade.data.user
 
-import io.reactivex.Observable
 import io.reactivex.Single
 
-interface UserRepository{
-
-    fun getQuerySubject(): Observable<Pair<String, Int>>
+interface UserRepository {
 
     fun getUsersByQuery(query: String, page: Int): Single<List<User>>
+
+    fun getUserByLogin(login: String): Single<User>
 }

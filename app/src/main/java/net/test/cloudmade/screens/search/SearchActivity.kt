@@ -6,7 +6,7 @@ import android.text.Editable
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_search.*
 import net.test.cloudmade.R
 import net.test.cloudmade.core.base.BaseActivity
 import net.test.cloudmade.screens.search.ui.UsersAdapter
@@ -31,7 +31,7 @@ class SearchActivity : BaseActivity(), StubTextWatcher {
     lateinit var viewModel: SearchViewModel
 
     override val layout: Int
-        get() = R.layout.activity_main
+        get() = R.layout.activity_search
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,6 +1,6 @@
 package net.test.cloudmade.screens.search
 
-import io.reactivex.disposables.Disposable
+import io.reactivex.Completable
 import io.reactivex.subjects.PublishSubject
 import net.test.cloudmade.core.base.BaseInteractor
 import net.test.cloudmade.data.user.User
@@ -10,26 +10,24 @@ import java.util.concurrent.TimeUnit
 
 class SearchInteractor(workers: Workers,
                        private val userRepository: UserRepository) : BaseInteractor(workers) {
+
     private companion object {
         const val DELAY_TIME = 500L
     }
 
-    var getUserDisposable: Disposable? = null
+    private val querySubject = PublishSubject.create<Pair<String, Int>>()
 
-    fun subscribeOnDelayedQuery(onSuccess: (Pair<String, Int>) -> Unit) {
-        disposables.add(PublishSubject.create<Pair<String, Int>>()
-                .debounce(DELAY_TIME, TimeUnit.MILLISECONDS)
-                .subscribe(onSuccess))
+    fun subscribeOnUserSearch(onSuccess: (List<User>) -> Unit) {
+        disposables.add(querySubject.debounce(DELAY_TIME, TimeUnit.MILLISECONDS)
+                .switchMapSingle { userRepository.getUsersByQuery(it.first, it.second) }
+                .retry()
+                .subscribe(onSuccess, {}))
     }
 
-    fun postQuery() {
+    fun postQuery(query: String, page: Int, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
 
-    }
-
-    fun onDebounce(query: String, page: Int, onSuccess: (List<User>) -> Unit, onError: (Throwable) -> Unit) {
-        getUserDisposable?.dispose()
-        getUserDisposable = userRepository.getUsersByQuery(query, page)
-                .schedule()
-                .subscribe(onSuccess, onError)
+        //to make interactor completely reactive
+        disposables.add(Completable.fromCallable { querySubject.onNext(Pair(query, page)) }
+                .subscribe(onSuccess, onError))
     }
 }

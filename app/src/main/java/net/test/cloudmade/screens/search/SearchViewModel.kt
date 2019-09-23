@@ -11,23 +11,24 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
     private var page = 1
 
     init {
-        interactor.subscribeOnDelayedQuery { interactor.onDebounce(it.first, it.second) }
+        interactor.subscribeOnUserSearch {
+            users.addAll(it)
+            liveDataUsers.postValue(users)
+        }
     }
 
     fun onSearch(query: String) {
         page = 1
         users.clear()
+        interactor.postQuery(query, page, {}, {})
     }
 
     fun onNextPage(query: String) {
         page++
+        interactor.postQuery(query, page, {}, {})
     }
 
     override fun onCleared() {
         interactor.clear()
-    }
-
-    private fun search(pair: Pair<String, Int>){
-
     }
 }
