@@ -18,6 +18,10 @@ import javax.inject.Inject
 
 class SearchActivity : BaseActivity(), StubTextWatcher {
 
+    private companion object {
+        const val DIRECTION_BOT = 1
+    }
+
     private val component by lazy {
         DaggerSearchComponent.builder()
                 .applicationComponent(getApplicationComponent())
@@ -40,15 +44,14 @@ class SearchActivity : BaseActivity(), StubTextWatcher {
     }
 
     override fun initViews() {
-        searchEt.addTextChangedListener(this)
         adapter = UsersAdapter(::onItemClicked)
         userRecyclerView.layoutManager = LinearLayoutManager(this)
         userRecyclerView.adapter = adapter
-
         userRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                if (!recyclerView.canScrollVertically(DIRECTION_BOT)
+                        && newState == RecyclerView.SCROLL_STATE_IDLE) {
                     viewModel.onNextPage(searchEt.text.toString())
                 }
             }
@@ -59,7 +62,15 @@ class SearchActivity : BaseActivity(), StubTextWatcher {
         viewModel.onSearch(s.toString())
     }
 
-    private fun onItemClicked(login: String){
-        startActivity(Intent(this, UserActivity::class.java))
+    override fun onResume() {
+        super.onResume()
+        //to avoid extra calls for search
+        searchEt.addTextChangedListener(this)
+    }
+
+    private fun onItemClicked(login: String) {
+        val intent = Intent(this, UserActivity::class.java)
+                .apply { putExtra(UserActivity.LOGIN_EXTRA, login) }
+        startActivity(intent)
     }
 }

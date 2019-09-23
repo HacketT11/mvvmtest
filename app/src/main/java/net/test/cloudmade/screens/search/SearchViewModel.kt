@@ -5,16 +5,12 @@ import androidx.lifecycle.ViewModel
 import net.test.cloudmade.data.user.User
 
 class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
-
-    val liveDataUsers = MutableLiveData<List<User>>()
     private val users = mutableListOf<User>()
     private var page = 1
 
-    init {
-        interactor.subscribeOnUserSearch {
-            users.addAll(it)
-            liveDataUsers.postValue(users)
-        }
+    val liveDataUsers by lazy {
+        interactor.subscribeOnUserSearch(::onDataLoaded)
+        return@lazy MutableLiveData<List<User>>()
     }
 
     fun onSearch(query: String) {
@@ -30,5 +26,10 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
     override fun onCleared() {
         interactor.clear()
+    }
+
+    private fun onDataLoaded(data: List<User>) {
+        users.addAll(data)
+        liveDataUsers.postValue(users)
     }
 }

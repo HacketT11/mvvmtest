@@ -13,10 +13,6 @@ import javax.inject.Singleton
 @Module
 class ApplicationModule {
 
-    private companion object {
-        const val BASE_URL = "https://api.github.com"
-    }
-
     @Provides
     @Singleton
     fun provideWorkers(): Workers =
@@ -24,5 +20,5 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun provideServiceProvider(): ServiceProvider = RetrofitServiceProvider(BASE_URL)
+    fun provideServiceProvider(): ServiceProvider = RetrofitServiceProvider(BuildConfig.BASE_URL)
 }

@@ -1,6 +1,7 @@
 package net.test.cloudmade.screens.search
 
 import io.reactivex.Completable
+import io.reactivex.subjects.AsyncSubject
 import io.reactivex.subjects.PublishSubject
 import net.test.cloudmade.core.base.BaseInteractor
 import net.test.cloudmade.data.user.User
@@ -25,7 +26,6 @@ class SearchInteractor(workers: Workers,
     }
 
     fun postQuery(query: String, page: Int, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
-
         //to make interactor completely reactive
         disposables.add(Completable.fromCallable { querySubject.onNext(Pair(query, page)) }
                 .subscribe(onSuccess, onError))

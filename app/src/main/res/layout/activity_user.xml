@@ -35,4 +35,5 @@
 		android:layout_marginTop="@dimen/margin_8"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/scoreEt" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

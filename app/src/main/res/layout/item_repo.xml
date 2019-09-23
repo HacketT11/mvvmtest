@@ -1,5 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical"></LinearLayout>
+	android:layout_height="wrap_content">
+
+	<TextView
+		android:id="@+id/idTitleTv"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/margin_8"
+		android:text="@string/hint_id"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<TextView
+		android:id="@+id/idTv"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/margin_8"
+		app:layout_constraintBottom_toBottomOf="@id/idTitleTv"
+		app:layout_constraintStart_toEndOf="@id/idTitleTv"
+		app:layout_constraintTop_toTopOf="@id/idTitleTv" />
+
+	<TextView
+		android:id="@+id/nameTitleTv"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/margin_8"
+		android:text="@string/hint_name"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/idTitleTv" />
+
+	<TextView
+		android:id="@+id/nameTv"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/margin_8"
+		app:layout_constraintBottom_toBottomOf="@id/nameTitleTv"
+		app:layout_constraintStart_toEndOf="@id/nameTitleTv"
+		app:layout_constraintTop_toTopOf="@id/nameTitleTv" />
+
+	<TextView
+		android:id="@+id/descriptionTv"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/margin_8"
+		android:layout_marginEnd="@dimen/margin_8"
+		android:layout_marginBottom="@dimen/margin_8"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toEndOf="@id/descriptionTitleTv"
+		app:layout_constraintTop_toTopOf="@id/descriptionTitleTv" />
+
+	<TextView
+		android:id="@+id/descriptionTitleTv"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/margin_8"
+		android:text="@string/hint_description"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/nameTitleTv" />
+
+	<TextView
+		android:id="@+id/languageTv"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/margin_8"
+		android:layout_marginEnd="@dimen/margin_8"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<TextView
+		android:id="@+id/languageTitleTv"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="@dimen/margin_8"
+		android:text="@string/hint_language"
+		app:layout_constraintBottom_toBottomOf="@id/languageTv"
+		app:layout_constraintEnd_toStartOf="@id/languageTv"
+		app:layout_constraintTop_toTopOf="@id/languageTv" />
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1px"
+		android:background="@android:color/darker_gray"
+		app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

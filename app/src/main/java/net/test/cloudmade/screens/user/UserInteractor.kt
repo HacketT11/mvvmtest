@@ -9,19 +9,23 @@ import net.test.cloudmade.data.user.User
 import net.test.cloudmade.data.user.UserRepository
 import net.test.cloudmade.utils.Workers
 
-class UserInteractor(workers: Workers,
+class UserInteractor(private val workers: Workers,
                      private val userRepository: UserRepository,
                      private val userRepoRepository: UserRepoRepository) : BaseInteractor(workers) {
 
     fun loadUserData(login: String, onSuccess: (Pair<User, List<UserRepo>>) -> Unit, onError: (Throwable) -> Unit) {
-        disposables.add(Single.zip(userRepository.getUserByLogin(login),
-                userRepoRepository.getUserReposiroties(login),
-                userDataComposer())
-                .schedule()
+        val userSingle = userRepository.getUserByLogin(login)
+                .subscribeOn(workers.subscribe)
+        val userRepoSingle = userRepoRepository.getUserReposiroties(login)
+                .subscribeOn(workers.subscribe)
+
+        disposables.add(Single.zip(userSingle, userRepoSingle, UserDataComposer())
+                .observeOn(workers.observe)
                 .subscribe(onSuccess, onError))
     }
 
-    class userDataComposer : BiFunction<User, List<UserRepo>, Pair<User, List<UserRepo>>> {
+
+    class UserDataComposer : BiFunction<User, List<UserRepo>, Pair<User, List<UserRepo>>> {
         override fun apply(user: User, repos: List<UserRepo>): Pair<User, List<UserRepo>> {
             return Pair(user, repos)
         }

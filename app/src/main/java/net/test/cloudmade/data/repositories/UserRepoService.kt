@@ -8,5 +8,5 @@ import retrofit2.http.Path
 interface UserRepoService {
 
     @GET("users/{login}/repos")
-    fun getUserRepositories(@Path("login") login: String): Single<Response<UserRepo>>
+    fun getUserRepositories(@Path("login") login: String): Single<List<UserRepo>>
 }
