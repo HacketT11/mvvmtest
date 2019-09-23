@@ -20,6 +20,8 @@ class SearchInteractor(workers: Workers,
     fun subscribeOnUserSearch(onSuccess: (List<User>) -> Unit, onError: (Throwable) -> Unit) {
         disposables.add(querySubject.debounce(DELAY_TIME, TimeUnit.MILLISECONDS)
                 .switchMapSingle { userRepository.getUsersByQuery(it.first, it.second) }
+                //because retry() ignores errors on subscribe
+                .doOnError(onError)
                 .retry()
                 .subscribe(onSuccess, onError))
     }

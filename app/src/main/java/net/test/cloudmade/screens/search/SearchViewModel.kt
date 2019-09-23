@@ -10,6 +10,7 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
     private var page = 1
 
     val isLoading = MutableLiveData<Boolean>()
+
     val liveDataUsers by lazy {
         interactor.subscribeOnUserSearch(::onDataLoaded, ::onError)
         return@lazy MutableLiveData<List<User>>()
