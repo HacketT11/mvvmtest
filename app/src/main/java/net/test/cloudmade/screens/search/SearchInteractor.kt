@@ -1,7 +1,6 @@
 package net.test.cloudmade.screens.search
 
 import io.reactivex.Completable
-import io.reactivex.subjects.AsyncSubject
 import io.reactivex.subjects.PublishSubject
 import net.test.cloudmade.core.base.BaseInteractor
 import net.test.cloudmade.data.user.User
@@ -18,11 +17,11 @@ class SearchInteractor(workers: Workers,
 
     private val querySubject = PublishSubject.create<Pair<String, Int>>()
 
-    fun subscribeOnUserSearch(onSuccess: (List<User>) -> Unit) {
+    fun subscribeOnUserSearch(onSuccess: (List<User>) -> Unit, onError: (Throwable) -> Unit) {
         disposables.add(querySubject.debounce(DELAY_TIME, TimeUnit.MILLISECONDS)
                 .switchMapSingle { userRepository.getUsersByQuery(it.first, it.second) }
                 .retry()
-                .subscribe(onSuccess, {}))
+                .subscribe(onSuccess, onError))
     }
 
     fun postQuery(query: String, page: Int, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {

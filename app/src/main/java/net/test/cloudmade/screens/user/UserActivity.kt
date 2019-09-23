@@ -1,6 +1,7 @@
 package net.test.cloudmade.screens.user
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_user.*
@@ -41,6 +42,9 @@ class UserActivity : BaseActivity() {
         component.inject(this)
         login = intent.getStringExtra(LOGIN_EXTRA)
         viewModel.getSubscription(login).observe(this, Observer { onUserDataLoaded(it) })
+        viewModel.isLoading.observe(this, Observer {
+            progressBar.visibility = if (it) View.VISIBLE else View.GONE
+        })
     }
 
     override fun initViews() {

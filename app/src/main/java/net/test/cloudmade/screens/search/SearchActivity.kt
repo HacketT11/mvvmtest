@@ -3,6 +3,7 @@ package net.test.cloudmade.screens.search
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,6 +42,9 @@ class SearchActivity : BaseActivity(), StubTextWatcher {
         super.onCreate(savedInstanceState)
         component.inject(this)
         viewModel.liveDataUsers.observe(this, Observer { adapter.list = it })
+        viewModel.isLoading.observe(this, Observer {
+            progressBar.visibility = if (it) View.VISIBLE else View.INVISIBLE
+        })
     }
 
     override fun initViews() {

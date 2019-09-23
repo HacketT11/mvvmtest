@@ -28,7 +28,7 @@ class UserViewModel(private val interactor: UserInteractor) : ViewModel() {
     }
 
     private fun onError(throwable: Throwable) {
-        //todo
+        isLoading.postValue(false)
     }
 
     override fun onCleared() {
