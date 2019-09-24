@@ -8,7 +8,7 @@ import net.test.cloudmade.data.user.UserRepository
 import net.test.cloudmade.utils.Workers
 import java.util.concurrent.TimeUnit
 
-class SearchInteractor(workers: Workers,
+class SearchInteractor(private val workers: Workers,
                        private val userRepository: UserRepository) : BaseInteractor(workers) {
 
     companion object {
@@ -24,6 +24,7 @@ class SearchInteractor(workers: Workers,
                 //because retry() ignores errors on subscribe
                 .doOnError(onError)
                 .retry()
+                .schedule()
                 .subscribe(onSuccess, onError))
     }
 
