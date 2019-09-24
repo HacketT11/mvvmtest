@@ -41,7 +41,10 @@ class SearchActivity : BaseActivity(), StubTextWatcher {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         component.inject(this)
-        viewModel.liveDataUsers.observe(this, Observer { adapter.list = it })
+        viewModel.liveDataUsers.observe(this, Observer {
+            adapter.hasLoading = it.second
+            adapter.list = it.first
+        })
         viewModel.isLoading.observe(this, Observer {
             progressBar.visibility = if (it) View.VISIBLE else View.INVISIBLE
         })
@@ -55,7 +58,8 @@ class SearchActivity : BaseActivity(), StubTextWatcher {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(DIRECTION_BOT)
-                        && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        && newState == RecyclerView.SCROLL_STATE_IDLE
+                        && adapter.hasLoading) {
                     viewModel.onNextPage(searchEt.text.toString())
                 }
             }

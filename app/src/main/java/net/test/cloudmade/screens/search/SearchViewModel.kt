@@ -3,8 +3,14 @@ package net.test.cloudmade.screens.search
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import net.test.cloudmade.data.user.User
+import retrofit2.HttpException
+import java.net.HttpURLConnection
 
 class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
+
+    private companion object {
+        const val HTTP_UNPROCESSABLE = 422
+    }
 
     private val users = mutableListOf<User>()
     private var page = 1
@@ -13,7 +19,7 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
     val liveDataUsers by lazy {
         interactor.subscribeOnUserSearch(::onDataLoaded, ::onError)
-        return@lazy MutableLiveData<List<User>>()
+        return@lazy MutableLiveData<Pair<List<User>, Boolean>>()
     }
 
     fun onSearch(query: String) {
@@ -33,14 +39,22 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
     }
 
     private fun onDataLoaded(data: List<User>) {
+        val hasLoading = data.size >= SearchInteractor.PAGE_COUNT
+
         users.addAll(data)
-        liveDataUsers.postValue(users)
+        liveDataUsers.postValue(Pair(users, hasLoading))
         isLoading.postValue(false)
     }
 
     private fun onError(throwable: Throwable) {
-        users.clear()
-        liveDataUsers.postValue(users)
+        if (throwable is HttpException) {
+            when (throwable.code()) {
+                HTTP_UNPROCESSABLE -> users.clear()
+                //more errors
+            }
+        }
+
+        liveDataUsers.postValue(Pair(users, false))
         isLoading.postValue(false)
     }
 }

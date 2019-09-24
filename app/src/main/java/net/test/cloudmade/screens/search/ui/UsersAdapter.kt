@@ -23,9 +23,10 @@ class UsersAdapter(private val onItemClick: (String) -> Unit) : RecyclerView.Ada
             notifyDataSetChanged()
         }
 
+    var hasLoading = true
 
     override fun getItemViewType(position: Int): Int {
-        return if (isLastPosition(position)) TYPE_LOADING else TYPE_CONTENT
+        return if (isLoadingPosition(position)) TYPE_LOADING else TYPE_CONTENT
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
@@ -37,14 +38,16 @@ class UsersAdapter(private val onItemClick: (String) -> Unit) : RecyclerView.Ada
         }
     }
 
-    override fun getItemCount(): Int = if (list.isEmpty()) 0 else list.size + 1
+    override fun getItemCount(): Int = if (list.isEmpty()) 0 else getSize()
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        if (!isLastPosition(position)) {
+        if (!isLoadingPosition(position)) {
             holder.bind(list[position])
             holder.itemView.setOnClickListener { onItemClick(list[position].login) }
         }
     }
 
-    private fun isLastPosition(position: Int) = position == list.size
+    private fun getSize() = if (hasLoading) list.size + 1 else list.size
+
+    private fun isLoadingPosition(position: Int) = position == list.size
 }

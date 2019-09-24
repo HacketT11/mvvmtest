@@ -11,8 +11,9 @@ import java.util.concurrent.TimeUnit
 class SearchInteractor(workers: Workers,
                        private val userRepository: UserRepository) : BaseInteractor(workers) {
 
-    private companion object {
+    companion object {
         const val DELAY_TIME = 500L
+        const val PAGE_COUNT = 30
     }
 
     private val querySubject = PublishSubject.create<Pair<String, Int>>()
