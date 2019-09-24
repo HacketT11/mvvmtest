@@ -8,7 +8,7 @@ import net.test.cloudmade.data.user.UserRepository
 import net.test.cloudmade.utils.Workers
 import java.util.concurrent.TimeUnit
 
-class SearchInteractor(private val workers: Workers,
+class SearchInteractor(workers: Workers,
                        private val userRepository: UserRepository) : BaseInteractor(workers) {
 
     companion object {
